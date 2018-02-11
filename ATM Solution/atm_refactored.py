@@ -9,6 +9,27 @@ class ATM():
         for WD_num, withdrawal in enumerate(self.withdrawals_list):
             print("Withdraw Nu. {} is {}".format(WD_num + 1, withdrawal))
 
+    def process_request(self,request):
+                self.withdrawals_list.append(request)
+                self.balance -= request
+                while request > 0:
+                    if request >= 100:
+                        request -= 100
+                        print("Given 100.")
+                    elif request >= 50:
+                        request -= 50
+                        print("Given 50.")
+                    elif request >= 10:
+                        request -= 10
+                        print("Given 10.")
+                    elif request >= 5:
+                        request -= 5
+                        print("Given 5.")
+                    else:
+                        print("Given {}.".format(request))
+                        request = 0
+                print("Your Balance after the withdraw is {}.".format(self.balance))
+
     def withdraw(self,request):
         # this section for a decorated msgs
         welcome_msg = "*** Welcome to {} ".format(self.bank_name)
@@ -24,25 +45,7 @@ class ATM():
         elif request < 0:
             print("Your request can't be done !! check your requested money")
         else:
-            self.withdrawals_list.append(request)
-            self.balance -= request
-            while request > 0:
-                if request >= 100:
-                    request -= 100
-                    print("Given 100.")
-                elif request >= 50:
-                    request -= 50
-                    print("Given 50.")
-                elif request >= 10:
-                    request -= 10
-                    print("Given 10.")
-                elif request >= 5:
-                    request -= 5
-                    print("Given 5.")
-                else:
-                    print("Given {}.".format(request))
-                    request = 0
-            print("Your Balance after the withdraw is {}.".format(self.balance))
+            ATM.process_request(self,request)
             return self.balance
 
 
