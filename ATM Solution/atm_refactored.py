@@ -2,6 +2,12 @@ class ATM():
     def __init__(self, balance, bank_name):
         self.balance = balance
         self.bank_name = bank_name
+        self.withdrawals_list = []
+        print("ATM for bank '{}' is successfully initialized with balance: {}.".format(self.bank_name,self.balance))
+
+    def show_withdrawals(self):
+        for WD_num, withdrawal in enumerate(self.withdrawals_list):
+            print("Withdraw Nu. {} is {}".format(WD_num + 1, withdrawal))
 
     def withdraw(self,request):
         # this section for a decorated msgs
@@ -18,6 +24,7 @@ class ATM():
         elif request < 0:
             print("Your request can't be done !! check your requested money")
         else:
+            self.withdrawals_list.append(request)
             self.balance -= request
             while request > 0:
                 if request >= 100:
@@ -35,7 +42,8 @@ class ATM():
                 else:
                     print("Given {}.".format(request))
                     request = 0
-            return "Your Balance after the withdraw is {}.".format(self.balance)
+            print("Your Balance after the withdraw is {}.".format(self.balance))
+            return self.balance
 
 
 
@@ -53,3 +61,7 @@ atm1.withdraw(800)
 atm2.withdraw(100)
 atm2.withdraw(820)
 atm2.withdraw(2000)
+
+
+atm1.show_withdrawals()
+atm2.show_withdrawals()
