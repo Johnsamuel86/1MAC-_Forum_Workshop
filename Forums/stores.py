@@ -1,44 +1,54 @@
 class MemberStore:
     members = []
+    last_id = 1
 
 
     def get_all(self):
-        return MemberStore.members
+        return self.members
 
     def add(self, member):
-        MemberStore.members.append(member)
+        member.id = self.last_id
+        self.members.append(member)
+        self.last_id += 1
+
+    def get_by_id(self, id):
+        for member in self.get_all():
+            if member.id == id:
+                return member
+
+    def entity_exists(self, member):
+        if member == self.get_by_id(member.id):
+            return True
+
+    def delete(self, id):
+        member = self.get_by_id(id)
+        self.members.remove(member)
+        return "Member is removed successfully"
 
 
 class PostStore:
     posts = []
+    last_id = 1
 
-    def create(self, member_name, post_title, post_content, uid):
-        PostStore.posts.append([member_name, post_title, post_content, uid])
 
     def get_all(self):
-        return PostStore.posts
+        return self.posts
 
-    @staticmethod
-    def find_post(title):
-        for post in PostStore.posts:
-            if post[1] == title:
+    def add(self, post):
+        post.id = self.last_id
+        self.posts.append(post)
+        self.last_id += 1
+
+    def get_by_id(self, id):
+        for post in self.get_all():
+            if post.id == id:
                 return post
 
+    def entity_exists(self, post):
+        if post == self.get_by_id(post.id):
+            return True
 
-    def read(self, title):
-        if PostStore.find_post(title) is not None:
-            return PostStore.find_post(title)
-        return "No post found that match your input to read"
-
-    def update(self, title, new_content):
-        post = PostStore.find_post(title)
-        if post is not None:
-            post[2] = new_content
-            return post
-        return "No post found that match your input to update"
-
-    def delete(self, title):
-        post = PostStore.find_post(title)
-        if post is not None:
-            return PostStore.posts.pop(PostStore.posts.index(post))
-        return "No post found that match your input to delete"
+    def delete(self, id):
+        post = self.get_by_id(id)
+        self.posts.remove(post)
+        return "Post is removed successfully"
