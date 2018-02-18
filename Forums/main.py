@@ -1,30 +1,73 @@
-from Forums.models import Member,Post
-import Forums.stores
+from Forums import models
+from Forums import stores
 
-memberstore = Forums.stores.MemberStore()
-poststore = Forums.stores.PostStore()
+def create_members():
+    member1 = models.Member("Mohammed", 20)
+    member2 = models.Member("Omar", 22)
+    member3 = models.Member("Abdo", 25)
+    print(member1)
+    print(member2)
+    print(member3)
+    print("=" * 30)
+    return member1, member2, member3
 
-member1 = Member("John", 32)
-memberstore.add(member1)
-print(memberstore.get_by_id(1).name)
 
-member2 = Member("Ahmed", 25)
-memberstore.add(member2)
-print(memberstore.get_by_id(2).name)
-print(memberstore.get_all())
+def store_should_add_models(members_instances, member_store):
+    for member in members_instances:
+        member_store.add(member)
 
-print(memberstore.entity_exists(member2))
-print(memberstore.delete(2))
-print(memberstore.get_all())
+def stores_should_be_similar():
+    member_store1 = stores.MemberStore()
+    member_store2 = stores.MemberStore()
+    if member_store1.get_all() is member_store2.get_all():
+        print("Same stores elements !")
 
-post1 = Post("Topic1", "This is the first topic !!!")
-poststore.add(post1)
-post2 = Post("Topic2", "This is the second topic !!!")
-poststore.add(post2)
-post3 = Post("Topic3", "This is the third topic !!!")
-poststore.add(post3)
+def print_all_members(member_store):
+    print("=" * 30)
+    for member in member_store.get_all():
+        print(member)
+    print("=" * 30)
 
-print(poststore.get_all())
-print(poststore.get_by_id(3))
-print(poststore.delete(1))
-print(poststore.get_all())
+
+def get_by_id_should_retrieve_same_object(member_store, member2):
+    member2_retrieved = member_store.get_by_id(member2.id)
+    if member2 is member2_retrieved:
+        print("member2 and member2_retrieved are matching !")
+
+def update_should_modify_object(member_store, member3):
+    member3_copy = models.Member(member3.name, member3.age)
+    member3_copy.id = 3
+    if member3_copy is not member3:
+        print("member3 and member3_copy are not the same !")
+
+    print(member3_copy)
+    member3_copy.name = "john"
+    member_store.update(member3_copy)
+    print(member_store.get_by_id(member3.id))
+
+
+def catch_exception_when_deleting():
+    try:
+        member_store.delete(5)
+    except ValueError:
+        print("It should be an existence entity before deleting !")
+
+
+members_instances = create_members()
+member1, member2, member3 = members_instances
+
+member_store = stores.MemberStore()
+
+store_should_add_models(members_instances, member_store)
+
+stores_should_be_similar()
+
+print_all_members(member_store)
+
+get_by_id_should_retrieve_same_object(member_store, member2)
+
+update_should_modify_object(member_store, member3)
+
+catch_exception_when_deleting()
+
+print_all_members(member_store)
