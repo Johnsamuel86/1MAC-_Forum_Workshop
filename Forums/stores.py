@@ -1,7 +1,6 @@
 class MemberStore:
     members = []
     last_id = 1
-    members_by_name = []
 
 
     def get_all(self):
@@ -16,19 +15,24 @@ class MemberStore:
         for member in self.get_all():
             if member.id == id:
                 return member
+        return None
 
     def update(self, member):
         old_member = self.get_by_id(member.id)
         MemberStore.members[MemberStore.members.index(old_member)] = member
 
     def get_by_name(self, member_name):
+        members_by_name = []
         for member in self.get_all():
             if member.name == member_name:
-                self.members_by_name.append(member)
-        return self.members_by_name
+                members_by_name.append(member)
+        return members_by_name
 
     def entity_exists(self, member):
-        return member == self.get_by_id(member.id)
+        try:
+            return member == self.get_by_id(member.id)
+        except:
+            print("Member Can't be None")
 
 
     def delete(self, id):
@@ -53,9 +57,13 @@ class PostStore:
         for post in self.get_all():
             if post.id == id:
                 return post
+        return None
 
     def entity_exists(self, post):
-        return post == self.get_by_id(post.id)
+        try:
+            return post == self.get_by_id(post.id)
+        except:
+            print("Post Can't be None")
 
     def delete(self, id):
         post = self.get_by_id(id)
