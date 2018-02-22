@@ -1,3 +1,4 @@
+from Forums import models
 class MemberStore:
     members = []
     last_id = 1
@@ -39,6 +40,14 @@ class MemberStore:
         member = self.get_by_id(id)
         MemberStore.members.remove(member)
 
+    def get_members_with_posts(self,posts):
+        models.Member.posts = [post for member in self.get_all() for post in posts if member.id == post.id]
+        return (member for member in self.get_all())
+
+    def get_top_two(self, posts):
+        members_with_posts = self.get_members_with_posts(posts)
+        sorted_members = sorted(members_with_posts, key=lambda member: len(member.posts), reverse=True)
+        return sorted_members[:2]
 
 class PostStore:
     posts = []

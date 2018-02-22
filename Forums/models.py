@@ -1,13 +1,14 @@
-import uuid
-
 class Member():
     def __init__(self, name, age):
+        self.id = 0
         self.name = name
         self.age = age
+        self.posts = []
 
 class Post():
-    def __init__(self, title, content, uid=None):
+    def __init__(self, title, content, member_id=0):
+        self.id = 0
         self.title = title
         self.content = content
-        self.uid = uuid.uuid4().hex if uid is None else uid
+        self.member_id = member_id
 
