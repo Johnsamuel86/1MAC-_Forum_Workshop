@@ -3,7 +3,7 @@ class Member():
         self.id = 0
         self.name = name
         self.age = age
-        self.posts = []
+        self.posts = set()
 
 class Post():
     def __init__(self, title, content, member_id=0):
